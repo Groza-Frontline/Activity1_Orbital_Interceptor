@@ -15,22 +15,8 @@ public class OrbitalTarget : MonoBehaviour
         timer += Time.deltaTime;
         float t = timer / travelDuration;
 
-        //Longer version of the waypoint code
-        ////2.
-        //Vector3 start, target;
-        //if (toPointB)
-        //{
-        //    start = pointA.position;
-        //    target = PointB.position;
-        //}
-        //else
-        //{
-        //    start = pointA.position;
-        //    target = PointB.position;
-        //}
-
         //Short version of the if else statement
-        Vector3 start = toPointB ? pointA.position :pointB.position;
+        Vector3 start = toPointB ? pointA.position : pointB.position;
         Vector3 target = toPointB ? pointB.position : pointA.position;
 
         //3. Apply Movement
