@@ -3,18 +3,28 @@ using UnityEngine;
 public class TurretTracker : MonoBehaviour
 {
     public Transform target;
-    public float speed = 5;
+    public Transform turret;
+    public float rotationSpeed = 5;
 
     // Update is called once per frame
     void Update()
     {
-        //Movement
-        transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-        // 2. Rotation with Quaternions
-        Vector3  directionToTarget = (target.position - transform.position).normalized;
-        if(directionToTarget != Vector3.zero)
+        //2. Rotation using Quaterions
+        Vector3 directionToTarget = (target.position - turret.position).normalized;
+        if (directionToTarget != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+            transform.rotation = Quaternion.Slerp(transform.rotation, target.rotation, rotationSpeed * Time.deltaTime);
+        }
+        float dotProduct = Vector3.Dot(transform.forward, directionToTarget);
+
+        if (dotProduct > 0.95)
+        {
+            Debug.Log("Target Locked");
+        }
+        else
+        {
+            Debug.Log("Searching");
         }
     }
 }
