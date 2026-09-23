@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     public void AddScore(int points)
     {
         playerScore += points;
+        Debug.Log("Target kill: " + points);
     }
-
 
 }

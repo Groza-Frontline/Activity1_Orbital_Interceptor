@@ -4,7 +4,9 @@ public class OrbitalTarget : MonoBehaviour
 {
     public Transform pointA, pointB;
     public float travelDuration;
-    public SphereCollider targetObject;
+
+    public GameManager manager;
+    public MeshRenderer targetObject;
 
     private float timer;
     private bool toPointB = true;
@@ -12,7 +14,7 @@ public class OrbitalTarget : MonoBehaviour
     //Used Awake to access the Sphere Collider(Target) to destroy it
     private void Awake()
     {
-        targetObject = GetComponent<SphereCollider>();
+        targetObject = GetComponent<MeshRenderer>();
     }
 
     // Update is called once per frame
@@ -38,13 +40,29 @@ public class OrbitalTarget : MonoBehaviour
         }
 
         //5. Bypasses manual raycasts
-        Input.GetMouseButtonDown(0);
+        if(Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if(Physics.Raycast(ray, out hit))
+            {
+                if(hit.transform == transform)
+                {
+                    OnMouseDown();
+                }
+            }
+        }
     }
 
-    public void OnMouseDown()
+    //Checks the OnMouseDown to perform disappearance
+    void OnMouseDown()
     {
         //If clicked
-        Destroy(gameObject);
+        manager.AddScore(1);
+        gameObject.SetActive(false);
+        //Destroy(targetObject);
+        //Destroys the gameObject
         Debug.Log("Target destroyed!");
     }
 }
