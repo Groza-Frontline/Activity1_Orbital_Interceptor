@@ -68,22 +68,5 @@ public class OrbitalTarget : MonoBehaviour
         Destroy(targetObject);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("HazardZone"))
-        {
-            Debug.Log("Drone entered the Hazard Zone");
-
-            if (GameManager.Instance != null)
-            {
-
-                GameManager.Instance.DeductScore(5);
-            }
-            else 
-            {
-                Debug.LogWarning("GameManager.Instance is null. Cannot deduct score.");
-            }
-        }
-        
-    }
+    
 }
