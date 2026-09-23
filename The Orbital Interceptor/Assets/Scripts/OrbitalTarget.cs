@@ -5,11 +5,21 @@ public class OrbitalTarget : MonoBehaviour
     public Transform pointA, pointB;
     public float travelDuration;
 
-    public GameManager manager;
+    //   public GameManager manager;
     public MeshRenderer targetObject;
 
     private float timer;
     private bool toPointB = true;
+
+    private void OnEnable()
+    {
+        Debug.Log($"Target ENABLED: {name}");
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log($"Target DISABLED: {name}");
+    }
 
     //Used Awake to access the Sphere Collider(Target) to destroy it
     private void Awake()
@@ -39,30 +49,41 @@ public class OrbitalTarget : MonoBehaviour
             toPointB = !toPointB;
         }
 
-        //5. Bypasses manual raycasts
-        if(Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if(Physics.Raycast(ray, out hit))
-            {
-                if(hit.transform == transform)
-                {
-                    OnMouseDown();
-                }
-            }
-        }
     }
 
-    //Checks the OnMouseDown to perform disappearance
-    void OnMouseDown()
+    //If target is clicked
+    private void OnMouseDown()
     {
-        //If clicked
-        manager.AddScore(1);
-        gameObject.SetActive(false);
-        //Destroy(targetObject);
-        //Destroys the gameObject
-        Debug.Log("Target destroyed!");
+        Debug.Log("Target is DESTROYED!");
+
+        if (GameManager.Instance != null) {
+
+            GameManager.Instance.AddScore(10);
+        }
+        else
+        {
+            Debug.LogWarning("GameManager.Instance is null. Score will not be added.");
+        }
+
+        Destroy(targetObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("HazardZone"))
+        {
+            Debug.Log("Drone entered the Hazard Zone");
+
+            if (GameManager.Instance != null)
+            {
+
+                GameManager.Instance.DeductScore(5);
+            }
+            else 
+            {
+                Debug.LogWarning("GameManager.Instance is null. Cannot deduct score.");
+            }
+        }
+        
     }
 }
