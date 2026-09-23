@@ -4,9 +4,16 @@ public class OrbitalTarget : MonoBehaviour
 {
     public Transform pointA, pointB;
     public float travelDuration;
+    public SphereCollider targetObject;
 
     private float timer;
     private bool toPointB = true;
+
+    //Used Awake to access the Sphere Collider(Target) to destroy it
+    private void Awake()
+    {
+        targetObject = GetComponent<SphereCollider>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -15,7 +22,7 @@ public class OrbitalTarget : MonoBehaviour
         timer += Time.deltaTime;
         float t = timer / travelDuration;
 
-        //Short version of the if else statement
+        //2. Short version of the if else statement
         Vector3 start = toPointB ? pointA.position : pointB.position;
         Vector3 target = toPointB ? pointB.position : pointA.position;
 
@@ -29,5 +36,15 @@ public class OrbitalTarget : MonoBehaviour
             // toPointB = false;
             toPointB = !toPointB;
         }
+
+        //5. Bypasses manual raycasts
+        Input.GetMouseButtonDown(0);
+    }
+
+    public void OnMouseDown()
+    {
+        //If clicked
+        Destroy(gameObject);
+        Debug.Log("Target destroyed!");
     }
 }
